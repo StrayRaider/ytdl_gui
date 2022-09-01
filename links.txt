@@ -1,11 +1,11 @@
 #bu bir denemedir
-*japanese
+*../Musics/japanese
 #japanese----------------------------------
 
 https://www.youtube.com/watch?v=PDSkFeMVNFs
 #------------------------------------------
 
-*gun n roses
+*../Musics/gun n roses
 #gun n roses-------------------------------
 
 #sweet child o mine
@@ -32,11 +32,11 @@ https://www.youtube.com/watch?v=FMbl1ntpIXQ
 https://www.youtube.com/watch?v=aHUmy5PvPjQ
 
 #-------------------------------------------
-*podcast
+*../Musics/podcast
 #dinlemelik podcast_st
 https://www.youtube.com/watch?v=JGEUuNPxXk0
 
-*kargo
+*../Musics/kargo
 #kargo
 
 #kehribar
@@ -46,7 +46,7 @@ https://www.youtube.com/watch?v=sTtI7eTxdJU
 #renklerin içinde
 https://www.youtube.com/watch?v=dqHVnXM09wo
 
-*cangox
+*../Musics/cangox
 #cangox
 #unutma beni
 https://www.youtube.com/watch?v=i092TZhC_lU
@@ -75,7 +75,7 @@ https://www.youtube.com/watch?v=Y5cJOuRRsjA
 
 #şebnem ferah
 
-*ali atay
+*../Musics/ali atay
 #ali atay
 https://www.youtube.com/watch?v=_rjsTlhqYZ8
 https://www.youtube.com/watch?v=1e9uvnc8iXw
@@ -88,8 +88,22 @@ https://www.youtube.com/watch?v=9qbH3v_xA44
 #belki
 https://www.youtube.com/watch?v=MNqj3UCT9xk
 
+/
+*../Musics/paramore
+#paramore file
 
-
-
-
-
+#decode
+https://www.youtube.com/watch?v=RvnkAtWcKYg
+#ignorence
+https://www.youtube.com/watch?v=OH9A6tn_P6g
+#only exception
+https://www.youtube.com/watch?v=-J7J_IWUhls
+#last hope
+https://www.youtube.com/watch?v=XoYu7K6Ywkg
+#the b sides full album
+https://www.youtube.com/watch?v=SQoc3HXOfqQ
+#brand new eyes full album
+https://www.youtube.com/watch?v=Ikp6xmihLk8
+#all we know is falling full album
+https://www.youtube.com/watch?v=P4BYQgPM4Ns
+/
