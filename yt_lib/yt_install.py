@@ -27,6 +27,8 @@ def loop(link_list):
         line_c +=1
     return installed
 
+def set_dir(dirct):
+    directory = dirct
 
 def download(link):
     try:
