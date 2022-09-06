@@ -1,7 +1,7 @@
 from pytube import YouTube
 import os
 
-directory = "../Music/No-name"
+directory = "../Musics/No-name"
 
 def loop(link_list):
     global directory
@@ -28,6 +28,7 @@ def loop(link_list):
     return installed
 
 def set_dir(dirct):
+    global directory
     directory = dirct
 
 def download(link):
@@ -36,7 +37,9 @@ def download(link):
     except:
         print(link,"linkde problem oluştu")
         exit()
+    print("mp3_stream başladı")
     mp3 = yt.streams.filter(only_audio=True).first()
+    print("mp3_stream bitti")
     out = mp3.download(directory)
 
     base, ext = os.path.splitext(out)
