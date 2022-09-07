@@ -22,7 +22,7 @@ class MyWindow(Gtk.Window):
 
         install_box = Gtk.VBox()
         #install_box.set_size_request(width=400, height=250)  
-        main_box.pack_start(install_box,0,0,10)
+        main_box.pack_start(install_box,0,0,0)
 
         new_box = Gtk.HBox()
         install_box.pack_start(new_box,0,0,10)
@@ -40,7 +40,7 @@ class MyWindow(Gtk.Window):
         install_box.pack_start(but_box,0,0,10)
 
         new_box = Gtk.HBox()
-        but_box.pack_start(new_box,0,0,10)
+        but_box.pack_start(new_box,0,0,0)
         self.button = Gtk.Button(label=" Install ")
         #self.button.connect("clicked", self.on_button_clicked)
         self.button.connect("clicked", self.install_one_song) 
