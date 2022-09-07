@@ -10,25 +10,46 @@ class MyWindow(Gtk.Window):
     def __init__(self):
         super().__init__(title="Youtube Installation")
 
-        main_box = Gtk.VBox()
+        main_box = Gtk.HBox()
         self.add(main_box)
 
+        right_box = Gtk.VBox()
+        left_box = Gtk.VBox()
+        main_box.pack_start(left_box,0,0,0)
+        main_box.pack_start(right_box,0,0,0)
+
+        new_box = Gtk.HBox()
+        right_box.pack_start(new_box,0,0,10)
+        self.search_entry = Gtk.Entry()
+        self.search_entry.set_placeholder_text("Type")
+        new_box.pack_start(self.search_entry,0,0,10)
+
+        but_box = Gtk.HBox()
+        right_box.pack_start(but_box,0,0,10)
+
+        new_box = Gtk.HBox()
+        but_box.pack_start(new_box,0,0,0)
+        self.button = Gtk.Button(label=" Search ")
+        #self.button.connect("clicked", self.on_button_clicked)
+        self.button.connect("clicked", self.search) 
+        new_box.pack_start(self.button,0,0,10)
+
         top_box = Gtk.HBox()
-        main_box.pack_start(top_box,0,0,10)
+        left_box.pack_start(top_box,0,0,10)
         self.settings_button = Gtk.Button(label = "Settings")
         self.settings_button.connect("clicked", self.settings_but_clicked)
         top_box.pack_start(self.settings_button,0,0,10)
 
-
         install_box = Gtk.VBox()
         #install_box.set_size_request(width=400, height=250)  
-        main_box.pack_start(install_box,0,0,0)
+        left_box.pack_start(install_box,0,0,0)
 
         new_box = Gtk.HBox()
         install_box.pack_start(new_box,0,0,10)
         self.url_entry = Gtk.Entry()
         self.url_entry.set_placeholder_text("Paste Url Here")
         new_box.pack_start(self.url_entry,0,0,10)
+
 
         new_box = Gtk.HBox()
         install_box.pack_start(new_box,0,0,10)
@@ -52,6 +73,9 @@ class MyWindow(Gtk.Window):
         #self.button.connect("clicked", self.on_button_clicked)
         #self.button.connect("clicked", yt_install.add_url_to_list) 
         #new_box.pack_start(self.button,0,0,10)
+
+    def search(self, widget):
+        print(self.search_entry.get_text())
 
     def settings_but_clicked(self,widget):
         pass

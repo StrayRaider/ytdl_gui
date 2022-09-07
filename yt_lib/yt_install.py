@@ -1,8 +1,23 @@
 from pytube import YouTube
+from youtubesearchpython import VideosSearch
 import os
 
 directory = "../Musics/No-name"
 history = True
+
+def search(word, limit_arg=1):
+    videosSearch = VideosSearch(word, limit = limit_arg)
+    result = videosSearch.result()['result']
+    print(result)
+    print(result[0])
+    video_1 = result[0]
+    print("\n",video_1['title'],"\n")
+    #fotoğraf url
+    print(video_1['thumbnails'][0]['url'],"\n")
+    print(video_1['link'])
+    
+
+search("eksik birşey mi var ali atay")
 
 def loop(link_list):
     global directory
@@ -32,7 +47,6 @@ def set_dir(dirct):
     global directory
     directory = dirct
 
-
 def write_link(link,name):
     #list_file = open("links.txt","r")
     #lines = list_file.readlines()
@@ -46,7 +60,6 @@ def write_link(link,name):
     list_file = open("links.txt","a")
     list_file.writelines(w_list)
     list_file.close()
-
 
 def download(link):
     try:
