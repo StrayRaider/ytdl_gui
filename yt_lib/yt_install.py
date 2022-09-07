@@ -2,6 +2,7 @@ from pytube import YouTube
 import os
 
 directory = "../Musics/No-name"
+history = True
 
 def loop(link_list):
     global directory
@@ -31,6 +32,22 @@ def set_dir(dirct):
     global directory
     directory = dirct
 
+
+def write_link(link,name):
+    #list_file = open("links.txt","r")
+    #lines = list_file.readlines()
+    #for line in lines:
+    #    print(line)
+    #   #satıra '#' ile satıra yorum ekleme
+    #list_file.close()
+    w_list = []
+    w_list.append("#"+ name +"\n")
+    w_list.append(str(link)+"\n\n")
+    list_file = open("links.txt","a")
+    list_file.writelines(w_list)
+    list_file.close()
+
+
 def download(link):
     try:
         yt = YouTube(link)
@@ -43,8 +60,12 @@ def download(link):
     out = mp3.download(directory)
 
     base, ext = os.path.splitext(out)
+    name = base.split("/")[-1]
+    print(name)
     to_mp3 = base + ".mp3"
     os.rename(out,to_mp3)
+    if history:
+        write_link(link,name)
 
 def list_obj():
     dosyalar = os.listdir(directory)

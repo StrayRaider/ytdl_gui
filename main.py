@@ -36,12 +36,22 @@ class MyWindow(Gtk.Window):
         self.dir_entry.set_placeholder_text("directory")
         new_box.pack_start(self.dir_entry,0,0,10)
 
+        but_box = Gtk.HBox()
+        install_box.pack_start(but_box,0,0,10)
+
         new_box = Gtk.HBox()
-        install_box.pack_start(new_box,0,0,10)
+        but_box.pack_start(new_box,0,0,10)
         self.button = Gtk.Button(label=" Install ")
         #self.button.connect("clicked", self.on_button_clicked)
         self.button.connect("clicked", self.install_one_song) 
         new_box.pack_start(self.button,0,0,10)
+
+        #new_box = Gtk.HBox()
+        #but_box.pack_start(new_box,0,0,10)
+        #self.button = Gtk.Button(label=" Add into list ")
+        #self.button.connect("clicked", self.on_button_clicked)
+        #self.button.connect("clicked", yt_install.add_url_to_list) 
+        #new_box.pack_start(self.button,0,0,10)
 
     def settings_but_clicked(self,widget):
         pass
