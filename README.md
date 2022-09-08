@@ -4,4 +4,7 @@
 
 ## To Do list
 
-- add search and install
+- arama ve indirme kısmı
+  - birden fazla arama yapılması
+  - yapılan çoklu aramanın yeni bir pencerede listelenmesi
+  - çoklu arama seçiminin sonucunda seçilen şarkıların indirilebilmesi
