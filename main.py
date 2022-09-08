@@ -27,12 +27,32 @@ class MyWindow(Gtk.Window):
         but_box = Gtk.HBox()
         right_box.pack_start(but_box,0,0,10)
 
+
         new_box = Gtk.HBox()
         but_box.pack_start(new_box,0,0,0)
         self.button = Gtk.Button(label=" Search ")
         #self.button.connect("clicked", self.on_button_clicked)
         self.button.connect("clicked", self.search) 
         new_box.pack_start(self.button,0,0,10)
+
+        label_box = Gtk.VBox()
+        right_box.pack_start(label_box ,0,0,10)
+        self.s_url, self.s_title = yt_install.search_get_info()
+        self.s_url_label = Gtk.Label()
+        self.s_title_label = Gtk.Label()
+        label_box.pack_start(self.s_title_label,0,0,10)
+        label_box.pack_start(self.s_url_label,0,0,10)
+        
+        self.s_url_label.set_text("Url : " + self.s_url)
+        self.s_title_label.set_text("Title : " + self.s_title)
+
+        new_box = Gtk.HBox()
+        but_box.pack_start(new_box,0,0,0)
+        self.button = Gtk.Button(label=" Paste ")
+        #self.button.connect("clicked", self.on_button_clicked)
+        self.button.connect("clicked", self.paste_into_install) 
+        new_box.pack_start(self.button,0,0,10)
+
 
         top_box = Gtk.HBox()
         left_box.pack_start(top_box,0,0,10)
@@ -75,7 +95,18 @@ class MyWindow(Gtk.Window):
         #new_box.pack_start(self.button,0,0,10)
 
     def search(self, widget):
-        print(self.search_entry.get_text())
+        entry = self.search_entry.get_text()
+        search_thread = threading.Thread(target =yt_install.search, args = [entry])
+        search_thread.start()
+        yt_install.search(entry)
+        self.s_url, self.s_title = yt_install.search_get_info()
+        print(self.s_url, self.s_title)
+
+        self.s_url_label.set_text("Url : " + self.s_url)
+        self.s_title_label.set_text("Title : " + self.s_title)
+
+    def paste_into_install(self,widget):
+        self.url_entry.set_text(self.s_url)
 
     def settings_but_clicked(self,widget):
         pass

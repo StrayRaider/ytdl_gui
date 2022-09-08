@@ -5,19 +5,29 @@ import os
 directory = "../Musics/No-name"
 history = True
 
+search_url = ""
+search_title = ""
+
 def search(word, limit_arg=1):
+    global search_url, search_title
     videosSearch = VideosSearch(word, limit = limit_arg)
     result = videosSearch.result()['result']
-    print(result)
-    print(result[0])
+    #print(result)
+    #print(result[0])
     video_1 = result[0]
-    print("\n",video_1['title'],"\n")
-    #fotoğraf url
-    print(video_1['thumbnails'][0]['url'],"\n")
-    print(video_1['link'])
+    #print("\n",video_1['title'],"\n")
     
+    #fotoğraf url
+    #print(video_1['thumbnails'][0]['url'],"\n")
+    search_title = video_1['title']
+    search_url = video_1['link']
+    #print(url)
 
 search("eksik birşey mi var ali atay")
+
+def search_get_info():
+    global search_url, search_title
+    return search_url, search_title
 
 def loop(link_list):
     global directory

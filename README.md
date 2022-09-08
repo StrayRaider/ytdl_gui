@@ -1,1 +1,7 @@
-# ytdl_gu-
+# YdlGuı
+
+
+
+## To Do list
+
+- add search and install
