@@ -1,6 +1,8 @@
 # YdlGuı
+gerekli kütüphanelerin kurulması
 
-
+pip3 install youtube-search-python
+pip3 install pytube
 
 ## To Do list
 
