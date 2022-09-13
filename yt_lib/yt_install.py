@@ -23,7 +23,7 @@ def search(word, limit_arg=1):
     search_url = video_1['link']
     #print(url)
 
-search("eksik birşey mi var ali atay")
+#search("eksik birşey mi var ali atay")
 
 def search_get_info():
     global search_url, search_title

@@ -2,7 +2,7 @@ import gi
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
-from yt_lib import yt_install
+from yt_lib import yt_install, song_widget
 
 import threading
 
@@ -93,6 +93,19 @@ class MyWindow(Gtk.Window):
         #self.button.connect("clicked", self.on_button_clicked)
         #self.button.connect("clicked", yt_install.add_url_to_list) 
         #new_box.pack_start(self.button,0,0,10)
+
+
+        #song_widget
+        song_box = Gtk.VBox()
+        main_box.pack_start(song_box,0,0,10)
+        #will be downloaded
+        down_list = []
+        for i in range(0,10):
+            down_list.append(song_widget.SongWidget(i))
+        for x in down_list:
+            for i in x.obj_l:
+                song_box.pack_start(i,0,0,2)
+
 
     def search(self, widget):
         entry = self.search_entry.get_text()
