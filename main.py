@@ -2,64 +2,63 @@ import gi
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
-from yt_lib import yt_install, song_widget
+from yt_lib import yt_install
 
 import threading
 
 class MyWindow(Gtk.Window):
     def __init__(self):
         super().__init__(title="Youtube Installation")
-
-        main_box = Gtk.HBox()
-        self.add(main_box)
-
+        #ana alanın oluşturulması
+        self.main_box = Gtk.HBox()
+        self.add(self.main_box)
+        #ana ekranın sağ ve sol olmak üzre iki dikey parçaya bölünmesi
         right_box = Gtk.VBox()
         left_box = Gtk.VBox()
-        main_box.pack_start(left_box,0,0,0)
-        main_box.pack_start(right_box,0,0,0)
-
+        self.main_box.pack_start(left_box,0,0,0)
+        self.main_box.pack_start(right_box,0,0,0)
+        #arama bölümünün oluşturulması
         new_box = Gtk.HBox()
         right_box.pack_start(new_box,0,0,10)
+        #arama verisini alıcak giriş objesi oluşturulması
         self.search_entry = Gtk.Entry()
         self.search_entry.set_placeholder_text("Type")
         new_box.pack_start(self.search_entry,0,0,10)
-
+        #aramayı başlatıcak buton için gerekli bölge oluşturulması
         but_box = Gtk.HBox()
         right_box.pack_start(but_box,0,0,10)
-
-
+        #arama butonunun oluşturulması
         new_box = Gtk.HBox()
         but_box.pack_start(new_box,0,0,0)
         self.button = Gtk.Button(label=" Search ")
         #self.button.connect("clicked", self.on_button_clicked)
         self.button.connect("clicked", self.search) 
         new_box.pack_start(self.button,0,0,10)
-
+        #arama sonuçlarının görüntülenmesi için oluşturulan kısım
         label_box = Gtk.VBox()
         right_box.pack_start(label_box ,0,0,10)
-        self.s_url, self.s_title = yt_install.search_get_info()
+        #self.s_url, self.s_title = yt_install.search_get_info()
         self.s_url_label = Gtk.Label()
         self.s_title_label = Gtk.Label()
         label_box.pack_start(self.s_title_label,0,0,10)
         label_box.pack_start(self.s_url_label,0,0,10)
         
-        self.s_url_label.set_text("Url : " + self.s_url)
-        self.s_title_label.set_text("Title : " + self.s_title)
-
+        #self.s_url_label.set_text("Url : " + self.s_url)
+        #self.s_title_label.set_text("Title : " + self.s_title)
+        #aranan url nin indirilme kısmına yapıştırılması
         new_box = Gtk.HBox()
         but_box.pack_start(new_box,0,0,0)
         self.button = Gtk.Button(label=" Paste ")
         #self.button.connect("clicked", self.on_button_clicked)
         self.button.connect("clicked", self.paste_into_install) 
         new_box.pack_start(self.button,0,0,10)
-
-
+        #settings bölümü
         top_box = Gtk.HBox()
         left_box.pack_start(top_box,0,0,10)
         self.settings_button = Gtk.Button(label = "Settings")
         self.settings_button.connect("clicked", self.settings_but_clicked)
         top_box.pack_start(self.settings_button,0,0,10)
-
+        #indirme işlminin yapılacağı sol kutu ve içeriği
         install_box = Gtk.VBox()
         #install_box.set_size_request(width=400, height=250)  
         left_box.pack_start(install_box,0,0,0)
@@ -94,32 +93,75 @@ class MyWindow(Gtk.Window):
         #self.button.connect("clicked", yt_install.add_url_to_list) 
         #new_box.pack_start(self.button,0,0,10)
 
+        #liste görüntüleme bölümü
+        list_box = Gtk.HBox()
+        self.main_box.pack_start(list_box,0,0,10)
 
-        #song_widget
-        song_box = Gtk.VBox()
-        main_box.pack_start(song_box,0,0,10)
-        #will be downloaded
-        down_list = []
-        for i in range(0,10):
-            down_list.append(song_widget.SongWidget(i))
-        for x in down_list:
-            for i in x.obj_l:
-                song_box.pack_start(i,0,0,2)
 
+
+
+        self.myliststore = Gtk.ListStore(bool,bool,str)
+        self.treeview = Gtk.TreeView(self.myliststore)
+
+        for n, header_text in enumerate(["Aktive", "Warning", "Text"]):
+            if header_text in ["Aktive", "Warning"]:
+                cell = Gtk.CellRendererToggle()
+                cell.connect("toggled", self.on_sync_treeview_button_toggled, n, header_text )
+                column = Gtk.TreeViewColumn(header_text, cell)
+                column.add_attribute(cell, "active", n)
+
+            else:
+                cell = Gtk.CellRendererText()
+                cell.set_property('editable', True)
+                column = Gtk.TreeViewColumn(header_text, cell, text=n)
+            column.set_sort_column_id(n)
+            self.treeview.append_column(column)
+        self.myliststore.append([True, False, "Super6!"])
+        self.myliststore.append([True, True, "Super7!"])
+        self.myliststore.append([False, True, "Super8!"])
+        self.main_box.pack_start(self.treeview, 0, 0, 10)
+
+
+        self.song_store = Gtk.ListStore(str,bool)
+        self.songtree = Gtk.TreeView(self.song_store)
+
+        column = Gtk.TreeViewColumn("deneme",cell,text = 0)
+        cell = Gtk.CellRendererText()
+        cell.set_property("editable", False)
+
+        check_cell = Gtk.CellRendererToggle()
+        check_cell.connect("toggled", self.on_sync_treeview_button_toggled,"basıldı")
+        t_column = Gtk.TreeViewColumn("deneme",check_cell)
+        t_column.add_attribute(check_cell,"active",0)
+
+        self.songtree.append_column(t_column)
+        self.songtree.append_column(column)
+
+        self.song_store.append(["deneme",True])
+        self.song_store.append(["deneme",True])
+        self.main_box.pack_start(self.songtree,0,0,10)
+
+
+
+    def on_sync_treeview_button_toggled(self, widget, path, column, data):
+        self.myliststore[path][column] = not self.myliststore[path][column]
+
+
+    def add_into_install(self,widget):
+        pass
 
     def search(self, widget):
         entry = self.search_entry.get_text()
         search_thread = threading.Thread(target =yt_install.search, args = [entry])
         search_thread.start()
         yt_install.search(entry)
-        self.s_url, self.s_title = yt_install.search_get_info()
-        print(self.s_url, self.s_title)
+        self.s_song_list = yt_install.song_list
 
-        self.s_url_label.set_text("Url : " + self.s_url)
-        self.s_title_label.set_text("Title : " + self.s_title)
+        #self.s_url_label.set_text("Url : " + self.s_url)
+        #self.s_title_label.set_text("Title : " + self.s_title)
 
     def paste_into_install(self,widget):
-        self.url_entry.set_text(self.s_url)
+        pass
 
     def settings_but_clicked(self,widget):
         pass
