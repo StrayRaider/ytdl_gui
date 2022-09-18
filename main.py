@@ -14,15 +14,15 @@ class MyWindow(Gtk.Window):
         self.add(self.main_box)
 
         #ekran şeması çıkartılması
-        left_box = Gtk.VBox()
-        right_box = Gtk.VBox()
+        left_box = Gtk.Box()
+        right_box = Gtk.Box()
         mid_box = Gtk.VBox()
         m_up_box = Gtk.VBox()
         m_cnt_box = Gtk.VBox()
         m_down_box = Gtk.VBox()
-        self.main_box.pack_start(left_box,0,0,0)
-        self.main_box.pack_start(mid_box,0,0,0)
-        self.main_box.pack_start(right_box,0,0,0)
+        self.main_box.pack_start(left_box,1,1,10)
+        self.main_box.pack_start(mid_box,1,1,10)
+        self.main_box.pack_start(right_box,1,1,10)
         mid_box.pack_start(m_up_box,0,0,0)
         mid_box.pack_start(m_cnt_box,0,0,0)
         mid_box.pack_start(m_down_box,0,0,0)
@@ -43,7 +43,17 @@ class MyWindow(Gtk.Window):
         self.button = Gtk.Button(label=" Search ")
         self.button.connect("clicked", self.search) 
         new_box.pack_start(self.button,0,0,10)
-        
+
+        adjustment = Gtk.Adjustment(value=0,
+                                    lower=0,
+                                    upper=10,
+                                    step_increment=1,
+                                    page_increment=5,
+                                    page_size=0)
+        self.song_count_b = Gtk.SpinButton(adjustment=adjustment)
+        new_box.pack_start(self.song_count_b,0,0,0)
+
+
         #settings bölümü
         top_box = Gtk.HBox()
         m_down_box.pack_start(top_box,0,0,10)
@@ -107,7 +117,10 @@ class MyWindow(Gtk.Window):
         #yeni satırlar oluşturma
         self.iSongStore.append(["deneme",True])
         self.iSongStore.append(["deneme",False])
-        left_box.pack_start(self.iSongTree,0,0,10)
+        left_box.set_size_request(300,500)
+        l_scrolled = Gtk.ScrolledWindow()
+        left_box.pack_start(l_scrolled,1,1,10)
+        l_scrolled.add(self.iSongTree)
 
 
         #--------------------------------Arama Sonucu Listesi
@@ -142,7 +155,15 @@ class MyWindow(Gtk.Window):
         #yeni satırlar oluşturma
         self.sSongStore.append(["song_title",True])
         self.sSongStore.append(["song_title",False])
-        right_box.pack_start(self.sSongTree,0,0,10)
+        right_box.set_size_request(300,500)
+        r_scrolled = Gtk.ScrolledWindow()
+        right_box.pack_start(r_scrolled,1,1,10)
+        r_scrolled.add(self.sSongTree)
+
+
+    def addToStore(self, obj_list, store, is_tick):
+        for obj in obj_list:
+            store.append([obj[0],is_tick])
 
     def tree_but_toggle(self, widget, path, column):
         print(path,column)
@@ -153,14 +174,14 @@ class MyWindow(Gtk.Window):
         pass
 
     def search(self, widget):
+        search_count = self.song_count_b.get_value_as_int()
         entry = self.search_entry.get_text()
         search_thread = threading.Thread(target =yt_install.search, args = [entry])
         search_thread.start()
-        yt_install.search(entry)
+        yt_install.search(entry,search_count)
         self.s_song_list = yt_install.song_list
-
-        #self.s_url_label.set_text("Url : " + self.s_url)
-        #self.s_title_label.set_text("Title : " + self.s_title)
+        print(self.s_song_list)
+        self.addToStore(self.s_song_list,self.sSongStore, False)
 
     def paste_into_install(self,widget):
         pass

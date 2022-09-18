@@ -7,8 +7,9 @@ history = True
 
 song_list = []
 
-def search(word, limit_arg=2):
-    global url_list, title_list
+def search(word, limit_arg=1):
+    global song_list
+    song_list.clear()
     videosSearch = VideosSearch(word, limit = limit_arg)
     result_list = videosSearch.result()['result']
     #print(result,"\n")
