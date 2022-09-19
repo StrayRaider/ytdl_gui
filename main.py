@@ -104,7 +104,7 @@ class MyWindow(Gtk.Window):
         #uygun hücre oluşturma
         check_cell = Gtk.CellRendererToggle()
         #hücre içi widget fonksiyon bağlantısı
-        check_cell.connect("toggled", self.tree_but_toggle,1)
+        check_cell.connect("toggled", self.tree_but_toggle,1,"i")
         #satır oluşturma 1. satır adı 2. hücre tipi
         t_column = Gtk.TreeViewColumn("deneme",check_cell)
         #stuna argümanları dışarda bu fonksiyonla da verebilirsin
@@ -116,7 +116,7 @@ class MyWindow(Gtk.Window):
  
         #yeni satırlar oluşturma
         self.iSongStore.append(["deneme",True])
-        self.iSongStore.append(["deneme",False])
+        self.iSongStore.append(["deneme",True])
         left_box.set_size_request(300,500)
         l_scrolled = Gtk.ScrolledWindow()
         left_box.pack_start(l_scrolled,1,1,10)
@@ -142,7 +142,7 @@ class MyWindow(Gtk.Window):
         #uygun hücre oluşturma
         check_cell = Gtk.CellRendererToggle()
         #hücre içi widget fonksiyon bağlantısı
-        check_cell.connect("toggled", self.tree_but_toggle,1)
+        check_cell.connect("toggled", self.tree_but_toggle,1,"s")
         #satır oluşturma 1. satır adı 2. hücre tipi
         t_column = Gtk.TreeViewColumn(search_t_n,check_cell)
         #stuna argümanları dışarda bu fonksiyonla da verebilirsin
@@ -153,7 +153,7 @@ class MyWindow(Gtk.Window):
         self.sSongTree.append_column(column)
  
         #yeni satırlar oluşturma
-        self.sSongStore.append(["song_title",True])
+        self.sSongStore.append(["song_title",False])
         self.sSongStore.append(["song_title",False])
         right_box.set_size_request(300,500)
         r_scrolled = Gtk.ScrolledWindow()
@@ -165,13 +165,26 @@ class MyWindow(Gtk.Window):
         for obj in obj_list:
             store.append([obj[0],is_tick])
 
-    def tree_but_toggle(self, widget, path, column):
+    def tree_but_toggle(self, widget, path, column, old_ls):
         print(path,column)
-        self.sSongStore[path][column] = not self.sSongStore[path][column]
-        print("toggled")
+        #basılmadan önceki hali
+        #print(self.sSongStore[path][column])#true ya da false döner
+        if old_ls == "s":
+            self.sSongStore[path][column] = not self.sSongStore[path][column]
+            self.add_into_install(path)
+        if old_ls == "i":
+            self.iSongStore[path][column] = not self.iSongStore[path][column]
+            self.add_into_search(path)
 
-    def add_into_install(self,widget):
-        pass
+    def add_into_install(self, path, widget = None):
+        self.iSongStore.append([*self.sSongStore[path]])
+        iter = self.sSongStore.get_iter(path)
+        self.sSongStore.remove(iter)
+
+    def add_into_search(self, path, widget = None):
+        self.sSongStore.append([*self.iSongStore[path]])
+        iter = self.iSongStore.get_iter(path)
+        self.iSongStore.remove(iter)
 
     def search(self, widget):
         search_count = self.song_count_b.get_value_as_int()
