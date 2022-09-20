@@ -12,4 +12,5 @@ gerekli kütüphanelerin kurulması
     - liststore kullanılacak
     - arananların listesinden seçilenler indirilecekler listesine atanacak
     - indir komutuyla hepsi indirilip geçmişte indirilenler kısmına eklenecek
+    - liststore objesine satırı sil butonu eklenicek
   - çoklu arama seçiminin sonucunda seçilen şarkıların indirilebilmesi

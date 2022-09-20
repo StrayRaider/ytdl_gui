@@ -32,10 +32,12 @@ def search_get_info():
 
 def loop(link_list):
     global directory
+    print("loop başladı")
     install_count = 0
     line_c = 1
     installed = 0
     for link in link_list:
+        print("döngü")
         if link != "":
             if link[0] != "#":
                 if link[0] == "/":
@@ -44,7 +46,7 @@ def loop(link_list):
                     if link[0] == "*":
                         directory = link[1::]
                     else:
-                        if install_count == 1:
+                        if install_count == 1 or True:
                             #oynatma listesi
                             installed += 1
                             print("download",line_c)
@@ -77,7 +79,8 @@ def download(link):
         yt = YouTube(link)
     except:
         print(link,"linkde problem oluştu")
-        exit()
+        return None
+        #exit()
     print("mp3_stream başladı")
     mp3 = yt.streams.filter(only_audio=True).first()
     print("mp3_stream bitti")

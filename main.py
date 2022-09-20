@@ -35,6 +35,7 @@ class MyWindow(Gtk.Window):
         self.search_entry = Gtk.Entry()
         self.search_entry.set_placeholder_text("Type")
         new_box.pack_start(self.search_entry,0,0,10)
+
         #arama but
         but_box = Gtk.HBox()
         m_cnt_box.pack_start(but_box,0,0,10)
@@ -85,13 +86,14 @@ class MyWindow(Gtk.Window):
         new_box = Gtk.HBox()
         but_box.pack_start(new_box,0,0,0)
         self.button = Gtk.Button(label=" Install ")
-        self.button.connect("clicked", self.install_one_song) 
+        #self.button.connect("clicked", self.install_one_song) 
+        self.button.connect("clicked", self.install_list)
         new_box.pack_start(self.button,0,0,10)
 
         #----------------------------------İndirilecekler Listesi
         #treeview ve list store oluşturulması
         #list store oluştururken sütunların hangi tipte değişken tutacağı belirtilir
-        self.iSongStore = Gtk.ListStore(str,bool)
+        self.iSongStore = Gtk.ListStore(str,bool,str)
         self.iSongTree = Gtk.TreeView(self.iSongStore)
         #içinde tutacağı değişken tipine göre bölme oluşturulması
         cell = Gtk.CellRendererText()
@@ -99,6 +101,7 @@ class MyWindow(Gtk.Window):
         #stun tanımlama işlemi 1. argüman stun adı, 2. tutacağı hücre tipi 3, ekleme
         #yaparken listenin kaçıncı argümanını alacağı
         column = Gtk.TreeViewColumn("deneme",cell,text = 0)
+        u_column = Gtk.TreeViewColumn("Url",cell,text = 2)
 
         #check button stunu oluşturma işlemi
         #uygun hücre oluşturma
@@ -112,11 +115,12 @@ class MyWindow(Gtk.Window):
 
         #stun treeview ekleme işlemi
         self.iSongTree.append_column(t_column)
+        self.iSongTree.append_column(u_column)
         self.iSongTree.append_column(column)
  
         #yeni satırlar oluşturma
-        self.iSongStore.append(["deneme",True])
-        self.iSongStore.append(["deneme",True])
+        self.iSongStore.append(["deneme",True,"url"])
+        self.iSongStore.append(["deneme",True,"url"])
         left_box.set_size_request(300,500)
         l_scrolled = Gtk.ScrolledWindow()
         left_box.pack_start(l_scrolled,1,1,10)
@@ -126,7 +130,7 @@ class MyWindow(Gtk.Window):
         #--------------------------------Arama Sonucu Listesi
         #treeview ve list store oluşturulması
         #list store oluştururken sütunların hangi tipte değişken tutacağı belirtilir
-        self.sSongStore = Gtk.ListStore(str,bool)
+        self.sSongStore = Gtk.ListStore(str,bool,str)
         self.sSongTree = Gtk.TreeView(self.sSongStore)
         #içinde tutacağı değişken tipine göre bölme oluşturulması
         cell = Gtk.CellRendererText()
@@ -137,7 +141,7 @@ class MyWindow(Gtk.Window):
         search_s_n = "searched song name"
         search_t_n = "wanna install ?"
         column = Gtk.TreeViewColumn(search_s_n,cell,text = 0)
-
+        u_column = Gtk.TreeViewColumn("Url",cell,text = 2)
         #check button stunu oluşturma işlemi
         #uygun hücre oluşturma
         check_cell = Gtk.CellRendererToggle()
@@ -150,20 +154,23 @@ class MyWindow(Gtk.Window):
 
         #stun treeview ekleme işlemi
         self.sSongTree.append_column(t_column)
+        self.sSongTree.append_column(u_column)
         self.sSongTree.append_column(column)
  
         #yeni satırlar oluşturma
-        self.sSongStore.append(["song_title",False])
-        self.sSongStore.append(["song_title",False])
+        self.sSongStore.append(["song_title",False,"Url"])
+        self.sSongStore.append(["song_title",False,"Url"])
         right_box.set_size_request(300,500)
         r_scrolled = Gtk.ScrolledWindow()
         right_box.pack_start(r_scrolled,1,1,10)
         r_scrolled.add(self.sSongTree)
 
+    def del_but_cl(self,widget):
+        pass
 
     def addToStore(self, obj_list, store, is_tick):
         for obj in obj_list:
-            store.append([obj[0],is_tick])
+            store.append([obj[0],is_tick, obj[1]])
 
     def tree_but_toggle(self, widget, path, column, old_ls):
         print(path,column)
@@ -213,6 +220,18 @@ class MyWindow(Gtk.Window):
             print("ok")
             #yt_install.download(self.entered_url) 
             install_thread = threading.Thread(target = yt_install.download, args = [self.entered_url])
+            print("installation done")
+            install_thread.start()
+
+    def install_list(self,widget):
+        install_list = [] # url list
+        print(self.iSongStore)
+        for row in self.iSongStore:
+            print(row[2])
+            install_list.append(row[2])
+        #iSongStore
+        if len(install_list) != 0:
+            install_thread = threading.Thread(target = yt_install.loop, args = [install_list])
             print("installation done")
             install_thread.start()
 
