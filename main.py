@@ -114,7 +114,7 @@ class MyWindow(Gtk.Window):
         #----------------------------------İndirilecekler Listesi
         #treeview ve list store oluşturulması
         #list store oluştururken sütunların hangi tipte değişken tutacağı belirtilir
-        self.iSongStore = Gtk.ListStore(str,bool,str)
+        self.iSongStore = Gtk.ListStore(str,bool,str,bool)
         self.iSongTree = Gtk.TreeView(self.iSongStore)
         #içinde tutacağı değişken tipine göre bölme oluşturulması
         cell = Gtk.CellRendererText()
@@ -128,17 +128,22 @@ class MyWindow(Gtk.Window):
         #check button stunu oluşturma işlemi
         #uygun hücre oluşturma
         check_cell = Gtk.CellRendererToggle()
+        del_cell = Gtk.CellRendererToggle()
         #hücre içi widget fonksiyon bağlantısı
         check_cell.connect("toggled", self.tree_but_toggle,1,"i")
+        del_cell.connect("toggled", self.del_tree_obj,3,"i")
         #satır oluşturma 1. satır adı 2. hücre tipi
         t_column = Gtk.TreeViewColumn("->",check_cell)
+        del_column = Gtk.TreeViewColumn("del",del_cell)
         #stuna argümanları dışarda bu fonksiyonla da verebilirsin
         t_column.add_attribute(check_cell,"active",1)
         u_column.set_max_width(70)
         t_column.set_max_width(30)
+        del_column.set_max_width(30)
 
         #stun treeview ekleme işlemi
         self.iSongTree.append_column(t_column)
+        self.iSongTree.append_column(del_column)
         self.iSongTree.append_column(u_column)
         self.iSongTree.append_column(column)
  
@@ -152,7 +157,7 @@ class MyWindow(Gtk.Window):
         #--------------------------------Arama Sonucu Listesi
         #treeview ve list store oluşturulması
         #list store oluştururken sütunların hangi tipte değişken tutacağı belirtilir
-        self.sSongStore = Gtk.ListStore(str,bool,str)
+        self.sSongStore = Gtk.ListStore(str,bool,str,bool)
         self.sSongTree = Gtk.TreeView(self.sSongStore)
         #içinde tutacağı değişken tipine göre bölme oluşturulması
         cell = Gtk.CellRendererText()
@@ -161,24 +166,27 @@ class MyWindow(Gtk.Window):
         #stun tanımlama işlemi 1. argüman stun adı, 2. tutacağı hücre tipi 3, ekleme
         #yaparken listenin kaçıncı argümanını alacağı
 
-        search_s_n = "searched song name"
-        search_t_n = "<-"
-        column = Gtk.TreeViewColumn(search_s_n,cell,text = 0)
+        column = Gtk.TreeViewColumn("searched song name",cell,text = 0)
         u_column = Gtk.TreeViewColumn("Url",cell,text = 2)
         #check button stunu oluşturma işlemi
         #uygun hücre oluşturma
         check_cell = Gtk.CellRendererToggle()
+        del_cell = Gtk.CellRendererToggle()
         #hücre içi widget fonksiyon bağlantısı
-        check_cell.connect("toggled", self.tree_but_toggle,1,"s")
+        check_cell.connect("toggled", self.tree_but_toggle, 1, "s")
+        del_cell.connect("toggled", self.del_tree_obj, 3, "s")
         #satır oluşturma 1. satır adı 2. hücre tipi
-        t_column = Gtk.TreeViewColumn(search_t_n,check_cell)
+        t_column = Gtk.TreeViewColumn("<-",check_cell)
+        del_column = Gtk.TreeViewColumn("del",del_cell)
         #stuna argümanları dışarda bu fonksiyonla da verebilirsin
         t_column.add_attribute(check_cell,"active",1)
         u_column.set_max_width(70)
         t_column.set_max_width(30)
+        del_column.set_max_width(30)
 
         #stun treeview ekleme işlemi
         self.sSongTree.append_column(t_column)
+        self.sSongTree.append_column(del_column)
         self.sSongTree.append_column(u_column)
         self.sSongTree.append_column(column)
  
@@ -193,12 +201,20 @@ class MyWindow(Gtk.Window):
     def add_song(self,widget):
         self.iSongStore.append([self.title_entry.get_text(), True, self.url_entry.get_text()])
 
-    def del_but_cl(self,widget):
-        pass
+    def del_tree_obj(self, widget, path, column, which):
+        print(path, column)
+        if which == "s":
+            print("s")
+            iter = self.sSongStore.get_iter(path)
+            self.sSongStore.remove(iter)
+        elif which == "i":
+            print("i")
+            iter = self.iSongStore.get_iter(path)
+            self.iSongStore.remove(iter)
 
-    def addToStore(self, obj_list, store, is_tick):
+    def addToStore(self, obj_list, store, is_tick,del_b):
         for obj in obj_list:
-            store.append([obj[0],is_tick, obj[1]])
+            store.append([obj[0],is_tick, obj[1],del_b])
 
     def tree_but_toggle(self, widget, path, column, old_ls):
         print(path,column)
@@ -230,7 +246,7 @@ class MyWindow(Gtk.Window):
         yt_install.search(entry,search_count)
         self.s_song_list = yt_install.song_list
         print(self.s_song_list)
-        self.addToStore(self.s_song_list,self.sSongStore, False)
+        self.addToStore(self.s_song_list,self.sSongStore, False, False)
 
     def paste_into_install(self,widget):
         pass
