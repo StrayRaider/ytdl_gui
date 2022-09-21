@@ -26,7 +26,12 @@ class MyWindow(Gtk.Window):
         mid_box.pack_start(m_up_box,0,0,0)
         mid_box.pack_start(m_cnt_box,0,0,0)
         mid_box.pack_start(m_down_box,0,0,0)
-        
+        x = 400
+        y = 700
+        right_box.set_size_request(x, y)
+        left_box.set_size_request(x, y)
+
+
         #  arama bölümünün oluşturulması
         new_box = Gtk.HBox()
         m_cnt_box.pack_start(new_box,0,0,10)
@@ -70,8 +75,20 @@ class MyWindow(Gtk.Window):
         new_box = Gtk.HBox()
         install_box.pack_start(new_box,0,0,10)
         self.url_entry = Gtk.Entry()
-        self.url_entry.set_placeholder_text("Paste Url Here")
+        self.url_entry.set_placeholder_text("Song's Url")
         new_box.pack_start(self.url_entry,0,0,10)
+
+        self.title_entry = Gtk.Entry()
+        self.title_entry.set_placeholder_text("Song's Title")
+        new_box.pack_start(self.title_entry,0,0,10)
+
+        nVBox = Gtk.VBox()
+        install_box.pack_start(nVBox,0,0,0)
+        self.add_button = Gtk.Button(label=" Add ")
+        #self.button.connect("clicked", self.install_one_song) 
+        self.add_button.connect("clicked", self.add_song)
+        nVBox.pack_start(self.add_button,0,0,0)
+
 
         #directory entry
         new_box = Gtk.HBox()
@@ -90,6 +107,10 @@ class MyWindow(Gtk.Window):
         self.button.connect("clicked", self.install_list)
         new_box.pack_start(self.button,0,0,10)
 
+        #spinner
+        self.spinner = Gtk.Spinner()
+        new_box.pack_start(self.spinner,0,0,0)
+
         #----------------------------------İndirilecekler Listesi
         #treeview ve list store oluşturulması
         #list store oluştururken sütunların hangi tipte değişken tutacağı belirtilir
@@ -97,10 +118,11 @@ class MyWindow(Gtk.Window):
         self.iSongTree = Gtk.TreeView(self.iSongStore)
         #içinde tutacağı değişken tipine göre bölme oluşturulması
         cell = Gtk.CellRendererText()
-        #cell.set_property("editable", True) #eğer tect değiştirilebilir olsun istersen
+        cell.set_property("editable", True) #eğer tect değiştirilebilir olsun istersen
         #stun tanımlama işlemi 1. argüman stun adı, 2. tutacağı hücre tipi 3, ekleme
         #yaparken listenin kaçıncı argümanını alacağı
-        column = Gtk.TreeViewColumn("deneme",cell,text = 0)
+        column = Gtk.TreeViewColumn("Song To Download",cell,text = 0)
+        column.set_max_width(200)
         u_column = Gtk.TreeViewColumn("Url",cell,text = 2)
 
         #check button stunu oluşturma işlemi
@@ -109,9 +131,11 @@ class MyWindow(Gtk.Window):
         #hücre içi widget fonksiyon bağlantısı
         check_cell.connect("toggled", self.tree_but_toggle,1,"i")
         #satır oluşturma 1. satır adı 2. hücre tipi
-        t_column = Gtk.TreeViewColumn("deneme",check_cell)
+        t_column = Gtk.TreeViewColumn("->",check_cell)
         #stuna argümanları dışarda bu fonksiyonla da verebilirsin
         t_column.add_attribute(check_cell,"active",1)
+        u_column.set_max_width(70)
+        t_column.set_max_width(30)
 
         #stun treeview ekleme işlemi
         self.iSongTree.append_column(t_column)
@@ -119,9 +143,7 @@ class MyWindow(Gtk.Window):
         self.iSongTree.append_column(column)
  
         #yeni satırlar oluşturma
-        self.iSongStore.append(["deneme",True,"url"])
-        self.iSongStore.append(["deneme",True,"url"])
-        left_box.set_size_request(300,500)
+        #self.iSongStore.append(["song_name",True,"url"])
         l_scrolled = Gtk.ScrolledWindow()
         left_box.pack_start(l_scrolled,1,1,10)
         l_scrolled.add(self.iSongTree)
@@ -134,12 +156,13 @@ class MyWindow(Gtk.Window):
         self.sSongTree = Gtk.TreeView(self.sSongStore)
         #içinde tutacağı değişken tipine göre bölme oluşturulması
         cell = Gtk.CellRendererText()
+        cell.set_property("editable", True) #eğer tect değiştirilebilir olsun istersen
         #cell.set_property("editable", True) #eğer tect değiştirilebilir olsun istersen
         #stun tanımlama işlemi 1. argüman stun adı, 2. tutacağı hücre tipi 3, ekleme
         #yaparken listenin kaçıncı argümanını alacağı
 
         search_s_n = "searched song name"
-        search_t_n = "wanna install ?"
+        search_t_n = "<-"
         column = Gtk.TreeViewColumn(search_s_n,cell,text = 0)
         u_column = Gtk.TreeViewColumn("Url",cell,text = 2)
         #check button stunu oluşturma işlemi
@@ -151,6 +174,8 @@ class MyWindow(Gtk.Window):
         t_column = Gtk.TreeViewColumn(search_t_n,check_cell)
         #stuna argümanları dışarda bu fonksiyonla da verebilirsin
         t_column.add_attribute(check_cell,"active",1)
+        u_column.set_max_width(70)
+        t_column.set_max_width(30)
 
         #stun treeview ekleme işlemi
         self.sSongTree.append_column(t_column)
@@ -158,12 +183,15 @@ class MyWindow(Gtk.Window):
         self.sSongTree.append_column(column)
  
         #yeni satırlar oluşturma
-        self.sSongStore.append(["song_title",False,"Url"])
-        self.sSongStore.append(["song_title",False,"Url"])
-        right_box.set_size_request(300,500)
+        #self.sSongStore.append(["song_title",False,"Url"])
+        #self.sSongStore.append(["song_title",False,"Url"])
         r_scrolled = Gtk.ScrolledWindow()
         right_box.pack_start(r_scrolled,1,1,10)
         r_scrolled.add(self.sSongTree)
+        #print(self.iSongStore.get_iter())
+
+    def add_song(self,widget):
+        self.iSongStore.append([self.title_entry.get_text(), True, self.url_entry.get_text()])
 
     def del_but_cl(self,widget):
         pass
@@ -198,6 +226,7 @@ class MyWindow(Gtk.Window):
         entry = self.search_entry.get_text()
         search_thread = threading.Thread(target =yt_install.search, args = [entry])
         search_thread.start()
+        print(search_thread.is_alive())
         yt_install.search(entry,search_count)
         self.s_song_list = yt_install.song_list
         print(self.s_song_list)
@@ -223,6 +252,12 @@ class MyWindow(Gtk.Window):
             print("installation done")
             install_thread.start()
 
+    def loop_stoped(self):
+        #iter = self.iSongStore.get_iter(path)
+        #self.iSongStore.remove(iter)
+        self.iSongStore.clear()
+        self.spinner.stop()
+
     def install_list(self,widget):
         install_list = [] # url list
         print(self.iSongStore)
@@ -231,7 +266,7 @@ class MyWindow(Gtk.Window):
             install_list.append(row[2])
         #iSongStore
         if len(install_list) != 0:
-            install_thread = threading.Thread(target = yt_install.loop, args = [install_list])
+            install_thread = threading.Thread(target = yt_install.loop, args = [install_list,self])
             print("installation done")
             install_thread.start()
 

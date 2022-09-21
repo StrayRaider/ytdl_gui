@@ -6,6 +6,8 @@ gerekli kütüphanelerin kurulması
 
 ## To Do list
 
+
+
 - arama ve indirme kısmı
   - birden fazla arama yapılması
   - yapılan çoklu aramanın yeni bir pencerede listelenmesi
@@ -13,4 +15,5 @@ gerekli kütüphanelerin kurulması
     - arananların listesinden seçilenler indirilecekler listesine atanacak
     - indir komutuyla hepsi indirilip geçmişte indirilenler kısmına eklenecek
     - liststore objesine satırı sil butonu eklenicek
+    - liststore objesinin hücrelerine boyut atama
   - çoklu arama seçiminin sonucunda seçilen şarkıların indirilebilmesi

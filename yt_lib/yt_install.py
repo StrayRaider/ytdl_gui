@@ -4,7 +4,7 @@ import os
 
 directory = "../Musics/No-name"
 history = True
-
+is_loop_running = False
 song_list = []
 
 def search(word, limit_arg=1):
@@ -30,8 +30,10 @@ def search_get_info():
     global song_list
     return song_list
 
-def loop(link_list):
+def loop(link_list,parent):
     global directory
+    parent.spinner.start()
+    is_loop_running = True
     print("loop başladı")
     install_count = 0
     line_c = 1
@@ -54,6 +56,10 @@ def loop(link_list):
             else:
                 print(link)
         line_c +=1
+    parent.loop_stoped()
+    is_loop_running = False
+
+    print("done")
     return installed
 
 def set_dir(dirct):
