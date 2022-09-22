@@ -9,6 +9,7 @@ import threading
 class MyWindow(Gtk.Window):
     def __init__(self):
         super().__init__(title="Youtube Installation")
+
         #ana alanın oluşturulması
         self.main_box = Gtk.HBox()
         self.add(self.main_box)
@@ -98,6 +99,15 @@ class MyWindow(Gtk.Window):
         new_box.pack_start(self.dir_entry,0,0,10)
         but_box = Gtk.HBox()
         install_box.pack_start(but_box,0,0,10)
+
+        #set dir but
+        #new_box = Gtk.HBox()
+        install_box.pack_start(new_box,0,0,0)
+        self.add_button = Gtk.Button(label="Set Directory")
+        #self.button.connect("clicked", self.install_one_song) 
+        self.add_button.connect("clicked", self.change_dir)
+        new_box.pack_start(self.add_button,0,0,0)
+
 
         #install but
         new_box = Gtk.HBox()
@@ -199,16 +209,14 @@ class MyWindow(Gtk.Window):
         #print(self.iSongStore.get_iter())
 
     def add_song(self,widget):
-        self.iSongStore.append([self.title_entry.get_text(), True, self.url_entry.get_text()])
+        self.iSongStore.append([self.title_entry.get_text(), True, self.url_entry.get_text(),False])
 
     def del_tree_obj(self, widget, path, column, which):
         print(path, column)
         if which == "s":
-            print("s")
             iter = self.sSongStore.get_iter(path)
             self.sSongStore.remove(iter)
         elif which == "i":
-            print("i")
             iter = self.iSongStore.get_iter(path)
             self.iSongStore.remove(iter)
 
@@ -217,7 +225,6 @@ class MyWindow(Gtk.Window):
             store.append([obj[0],is_tick, obj[1],del_b])
 
     def tree_but_toggle(self, widget, path, column, old_ls):
-        print(path,column)
         #basılmadan önceki hali
         #print(self.sSongStore[path][column])#true ya da false döner
         if old_ls == "s":
@@ -242,18 +249,18 @@ class MyWindow(Gtk.Window):
         entry = self.search_entry.get_text()
         search_thread = threading.Thread(target =yt_install.search, args = [entry])
         search_thread.start()
-        print(search_thread.is_alive())
         yt_install.search(entry,search_count)
         self.s_song_list = yt_install.song_list
-        print(self.s_song_list)
         self.addToStore(self.s_song_list,self.sSongStore, False, False)
-
-    def paste_into_install(self,widget):
-        pass
 
     def settings_but_clicked(self,widget):
         pass
 
+    def change_dir(self, widget):
+        yt_install.directory = self.dir_entry.get_text()
+        #print(yt_install.directory)
+
+    #settingsden bu bölüm eklenebilir olmaıl mı ?
     def install_one_song(self,widget):
         self.entered_url = self.url_entry.get_text()
         print(self.entered_url)
@@ -269,34 +276,29 @@ class MyWindow(Gtk.Window):
             install_thread.start()
 
     def loop_stoped(self):
-        #iter = self.iSongStore.get_iter(path)
-        #self.iSongStore.remove(iter)
+        #tüm install list_store yi boşaltır
         self.iSongStore.clear()
         self.spinner.stop()
 
     def install_list(self,widget):
         install_list = [] # url list
-        print(self.iSongStore)
         for row in self.iSongStore:
-            print(row[2])
             install_list.append(row[2])
         #iSongStore
         if len(install_list) != 0:
             install_thread = threading.Thread(target = yt_install.loop, args = [install_list,self])
-            print("installation done")
             install_thread.start()
 
     def on_button_clicked(self, widget):
         link_list = yt_install.set_link_list()
         line = yt_install.loop(link_list)
-        print("installation compleated.",line," sound downloaded")
+        #label olarak eklenebilir.
+        #print("installation compleated.",line," sound downloaded")
 
 def quit_app(arg):
-    #global install_thread
     print("quiting..")
-    #print(type(install_thread))
     Gtk.main_quit()
-    print("Done")
+    print("All Done")
 
 #if not t1.isAlive(): is thread alive
 
