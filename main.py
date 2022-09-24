@@ -2,7 +2,7 @@ import gi
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
-from yt_lib import yt_install
+from yt_lib import yt_install, settings_win
 
 import threading
 
@@ -10,11 +10,11 @@ class MyWindow(Gtk.Window):
     def __init__(self):
         super().__init__(title="Youtube Installation")
 
-        #ana alanın oluşturulması
+        # adding main box
         self.main_box = Gtk.HBox()
         self.add(self.main_box)
 
-        #ekran şeması çıkartılması
+        #screen tiles etc..
         left_box = Gtk.Box()
         right_box = Gtk.Box()
         mid_box = Gtk.VBox()
@@ -33,16 +33,16 @@ class MyWindow(Gtk.Window):
         left_box.set_size_request(x, y)
 
 
-        #  arama bölümünün oluşturulması
+        #Search Part
         new_box = Gtk.HBox()
         m_cnt_box.pack_start(new_box,0,0,10)
 
-        #arama entry
+        #Search entry
         self.search_entry = Gtk.Entry()
         self.search_entry.set_placeholder_text("Type")
         new_box.pack_start(self.search_entry,0,0,10)
 
-        #arama but
+        #Search button
         but_box = Gtk.HBox()
         m_cnt_box.pack_start(but_box,0,0,10)
         new_box = Gtk.HBox()
@@ -51,9 +51,10 @@ class MyWindow(Gtk.Window):
         self.button.connect("clicked", self.search) 
         new_box.pack_start(self.button,0,0,10)
 
+        # adjustments for spin_button
         adjustment = Gtk.Adjustment(value=0,
-                                    lower=0,
-                                    upper=10,
+                                    lower=1,
+                                    upper=20,
                                     step_increment=1,
                                     page_increment=5,
                                     page_size=0)
@@ -61,18 +62,18 @@ class MyWindow(Gtk.Window):
         new_box.pack_start(self.song_count_b,0,0,0)
 
 
-        #settings bölümü
+        #settings Part
         top_box = Gtk.HBox()
         m_down_box.pack_start(top_box,0,0,10)
         self.settings_button = Gtk.Button(label = "Settings")
         self.settings_button.connect("clicked", self.settings_but_clicked)
         m_down_box.pack_start(self.settings_button,0,0,10)
 
-        #indirme bölümü
+        #installation Part
         install_box = Gtk.VBox()
         m_up_box.pack_start(install_box,0,0,0)
 
-        #indirme entry
+        #install entry
         new_box = Gtk.HBox()
         install_box.pack_start(new_box,0,0,10)
         self.url_entry = Gtk.Entry()
@@ -83,6 +84,7 @@ class MyWindow(Gtk.Window):
         self.title_entry.set_placeholder_text("Song's Title")
         new_box.pack_start(self.title_entry,0,0,10)
 
+
         nVBox = Gtk.VBox()
         install_box.pack_start(nVBox,0,0,0)
         self.add_button = Gtk.Button(label=" Add ")
@@ -90,32 +92,28 @@ class MyWindow(Gtk.Window):
         self.add_button.connect("clicked", self.add_song)
         nVBox.pack_start(self.add_button,0,0,0)
 
-
         #directory entry
         new_box = Gtk.HBox()
         install_box.pack_start(new_box,0,0,10)
         self.dir_entry = Gtk.Entry()
         self.dir_entry.set_placeholder_text("directory")
         new_box.pack_start(self.dir_entry,0,0,10)
-        but_box = Gtk.HBox()
-        install_box.pack_start(but_box,0,0,10)
 
         #set dir but
         #new_box = Gtk.HBox()
-        install_box.pack_start(new_box,0,0,0)
+        install_box.pack_start(new_box,1,1,0)
         self.add_button = Gtk.Button(label="Set Directory")
         #self.button.connect("clicked", self.install_one_song) 
         self.add_button.connect("clicked", self.change_dir)
         new_box.pack_start(self.add_button,0,0,0)
 
-
         #install but
-        new_box = Gtk.HBox()
-        but_box.pack_start(new_box,0,0,0)
+        nVBox = Gtk.VBox()
+        install_box.pack_start(nVBox,0,0,10)
         self.button = Gtk.Button(label=" Install ")
         #self.button.connect("clicked", self.install_one_song) 
         self.button.connect("clicked", self.install_list)
-        new_box.pack_start(self.button,0,0,10)
+        nVBox.pack_start(self.button,0,0,10)
 
         #spinner
         self.spinner = Gtk.Spinner()
@@ -163,7 +161,6 @@ class MyWindow(Gtk.Window):
         left_box.pack_start(l_scrolled,1,1,10)
         l_scrolled.add(self.iSongTree)
 
-
         #--------------------------------Arama Sonucu Listesi
         #treeview ve list store oluşturulması
         #list store oluştururken sütunların hangi tipte değişken tutacağı belirtilir
@@ -193,8 +190,6 @@ class MyWindow(Gtk.Window):
         u_column.set_max_width(70)
         t_column.set_max_width(30)
         del_column.set_max_width(30)
-
-        #stun treeview ekleme işlemi
         self.sSongTree.append_column(t_column)
         self.sSongTree.append_column(del_column)
         self.sSongTree.append_column(u_column)
@@ -254,6 +249,10 @@ class MyWindow(Gtk.Window):
         self.addToStore(self.s_song_list,self.sSongStore, False, False)
 
     def settings_but_clicked(self,widget):
+        settings = settings_win.MainWindow()
+        print(win)
+        settings.connect("delete-event", Gtk.main_quit)
+        settings.show_all()
         pass
 
     def change_dir(self, widget):
