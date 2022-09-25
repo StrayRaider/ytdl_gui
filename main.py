@@ -251,7 +251,7 @@ class MyWindow(Gtk.Window):
     def settings_but_clicked(self,widget):
         settings = settings_win.MainWindow()
         print(win)
-        settings.connect("delete-event", Gtk.main_quit)
+        settings.connect("delete-event", settings.destroy)
         settings.show_all()
         pass
 
