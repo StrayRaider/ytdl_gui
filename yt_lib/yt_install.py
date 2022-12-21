@@ -81,6 +81,7 @@ def write_link(link,name):
     list_file.close()
 
 def download(link):
+    typ = "vd"
     try:
         yt = YouTube(link)
     except:
@@ -88,17 +89,22 @@ def download(link):
         return None
         #exit()
     print("mp3_stream başladı")
-    mp3 = yt.streams.filter(only_audio=True).first()
-    print("mp3_stream bitti")
-    out = mp3.download(directory)
+    if typ == "mp3":
+        mp3 = yt.streams.filter(only_audio=True).first()
+        print("mp3_stream bitti")
+        out = mp3.download(directory)
 
-    base, ext = os.path.splitext(out)
-    name = base.split("/")[-1]
-    print(name)
-    to_mp3 = base + ".mp3"
-    os.rename(out,to_mp3)
-    if history:
-        write_link(link,name)
+        base, ext = os.path.splitext(out)
+        name = base.split("/")[-1]
+        print(name)
+        to_mp3 = base + ".mp3"
+        os.rename(out,to_mp3)
+        if history:
+            write_link(link,name)
+    else:
+        mp4 = yt.streams.filter(res="480p").first()
+        out = mp4.download(directory)
+        print("mp3_stream bitti")
 
 def list_obj():
     dosyalar = os.listdir(directory)
