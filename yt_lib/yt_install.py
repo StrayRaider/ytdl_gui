@@ -30,7 +30,7 @@ def search_get_info():
     global song_list
     return song_list
 
-def loop(link_list,parent):
+def loop(link_list,parent,installation_type):
     global directory
     parent.spinner.start()
     is_loop_running = True
@@ -52,7 +52,7 @@ def loop(link_list,parent):
                             #oynatma listesi
                             installed += 1
                             print("download",line_c)
-                            download(link)
+                            download(link,installation_type)
             else:
                 print(link)
         line_c +=1
@@ -80,8 +80,7 @@ def write_link(link,name):
     list_file.writelines(w_list)
     list_file.close()
 
-def download(link):
-    typ = "vd"
+def download(link,installation_type):
     try:
         yt = YouTube(link)
     except:
@@ -89,7 +88,7 @@ def download(link):
         return None
         #exit()
     print("mp3_stream başladı")
-    if typ == "mp3":
+    if installation_type == "mp3":
         mp3 = yt.streams.filter(only_audio=True).first()
         print("mp3_stream bitti")
         out = mp3.download(directory)
@@ -102,9 +101,9 @@ def download(link):
         if history:
             write_link(link,name)
     else:
-        mp4 = yt.streams.filter(res="480p").first()
+        mp4 = yt.streams.filter(res="720p",mime_type="video/mp4").first()
         out = mp4.download(directory)
-        print("mp3_stream bitti")
+        print("mp4_stream bitti")
 
 def list_obj():
     dosyalar = os.listdir(directory)

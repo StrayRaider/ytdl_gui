@@ -41,6 +41,20 @@ class MyWindow(Gtk.Window):
         self.search_entry = Gtk.Entry()
         self.search_entry.set_placeholder_text("Type")
         new_box.pack_start(self.search_entry,0,0,10)
+        
+        #mp3 or mp4 chooser
+        new_box = Gtk.HBox()
+        m_cnt_box.pack_start(new_box,0,0,10)
+
+        new_box.pack_start(Gtk.Label("mp3 or mp4"),0,0,5)
+        self.protocol_combo = Gtk.ComboBoxText()
+        
+        #all connection elements
+        for pro in ["mp3","mp4"]:
+            self.protocol_combo.append_text(pro)
+        new_box.pack_start(self.protocol_combo,1,1,5)
+        
+        m_cnt_box.pack_start(new_box,0,0,5)
 
         #Search button
         but_box = Gtk.HBox()
@@ -270,7 +284,8 @@ class MyWindow(Gtk.Window):
                 yt_install.set_dir(str(new_dir))
             print("ok")
             #yt_install.download(self.entered_url) 
-            install_thread = threading.Thread(target = yt_install.download, args = [self.entered_url])
+            installation_type = self.protocol_combo.get_active_text()
+            install_thread = threading.Thread(target = yt_install.download, args = [self.entered_url,installation_type])
             print("installation done")
             install_thread.start()
 
@@ -281,16 +296,18 @@ class MyWindow(Gtk.Window):
 
     def install_list(self,widget):
         install_list = [] # url list
+        installation_type = self.protocol_combo.get_active_text()
         for row in self.iSongStore:
             install_list.append(row[2])
         #iSongStore
         if len(install_list) != 0:
-            install_thread = threading.Thread(target = yt_install.loop, args = [install_list,self])
+            install_thread = threading.Thread(target = yt_install.loop, args = [install_list,self,installation_type])
             install_thread.start()
 
     def on_button_clicked(self, widget):
         link_list = yt_install.set_link_list()
-        line = yt_install.loop(link_list)
+        installation_type = self.protocol_combo.get_active_text()
+        line = yt_install.loop(link_list,installation_type)
         #label olarak eklenebilir.
         #print("installation compleated.",line," sound downloaded")
 
