@@ -19,14 +19,20 @@ class MyWindow(Gtk.Window):
         right_box = Gtk.Box()
         mid_box = Gtk.VBox()
         m_up_box = Gtk.VBox()
+        add_url_frame = Gtk.Frame()
+        add_url_frame.add(m_up_box)
         m_cnt_box = Gtk.VBox()
+        search_frame = Gtk.Frame()
+        search_frame.add(m_cnt_box)
         m_down_box = Gtk.VBox()
+        install_frame = Gtk.Frame()
+        install_frame.add(m_down_box)
         self.main_box.pack_start(left_box,1,1,10)
         self.main_box.pack_start(mid_box,1,1,10)
         self.main_box.pack_start(right_box,1,1,10)
-        mid_box.pack_start(m_up_box,0,0,0)
-        mid_box.pack_start(m_cnt_box,0,0,0)
-        mid_box.pack_start(m_down_box,0,0,0)
+        mid_box.pack_start(add_url_frame,1,1,5)
+        mid_box.pack_start(search_frame,1,1,5)
+        mid_box.pack_start(install_frame,1,1,5)
         x = 400
         y = 700
         right_box.set_size_request(x, y)
@@ -100,11 +106,11 @@ class MyWindow(Gtk.Window):
 
 
         nVBox = Gtk.VBox()
-        install_box.pack_start(nVBox,0,0,0)
+        install_box.pack_start(nVBox,1,1,10)
         self.add_button = Gtk.Button(label=" Add ")
         #self.button.connect("clicked", self.install_one_song) 
         self.add_button.connect("clicked", self.add_song)
-        nVBox.pack_start(self.add_button,0,0,0)
+        nVBox.pack_start(self.add_button,1,1,10)
 
         #directory entry
         new_box = Gtk.HBox()
@@ -116,18 +122,18 @@ class MyWindow(Gtk.Window):
         #set dir but
         #new_box = Gtk.HBox()
         install_box.pack_start(new_box,1,1,0)
-        self.add_button = Gtk.Button(label="Set Directory")
+        self.set_dir_button = Gtk.Button(label="Set Directory")
         #self.button.connect("clicked", self.install_one_song) 
-        self.add_button.connect("clicked", self.change_dir)
-        new_box.pack_start(self.add_button,0,0,0)
+        self.set_dir_button.connect("clicked", self.change_dir)
+        new_box.pack_start(self.set_dir_button,0,0,0)
 
         #install but
         nVBox = Gtk.VBox()
-        install_box.pack_start(nVBox,0,0,10)
+        install_box.pack_start(nVBox,1,1,10)
         self.button = Gtk.Button(label=" Install ")
         #self.button.connect("clicked", self.install_one_song) 
         self.button.connect("clicked", self.install_list)
-        nVBox.pack_start(self.button,0,0,10)
+        nVBox.pack_start(self.button,1,1,10)
 
         #spinner
         self.spinner = Gtk.Spinner()
