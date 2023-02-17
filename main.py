@@ -81,14 +81,6 @@ class MyWindow(Gtk.Window):
         self.song_count_b = Gtk.SpinButton(adjustment=adjustment)
         new_box.pack_start(self.song_count_b,0,0,0)
 
-
-        #settings Part
-        top_box = Gtk.HBox()
-        m_down_box.pack_start(top_box,0,0,10)
-        self.settings_button = Gtk.Button(label = "Settings")
-        self.settings_button.connect("clicked", self.settings_but_clicked)
-        m_down_box.pack_start(self.settings_button,0,0,10)
-
         #installation Part
         install_box = Gtk.VBox()
         m_up_box.pack_start(install_box,0,0,0)
