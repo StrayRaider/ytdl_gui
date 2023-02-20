@@ -109,11 +109,18 @@ class MyWindow(Gtk.Window):
             self.protocol_combo.append_text(pro)
         new_box.pack_start(self.protocol_combo,0,0,5)
         
-        m_cnt_box.pack_start(new_box,0,0,5)
+        m_down_box.pack_start(new_box,0,0,5)
 
         #spinner
         self.spinner = Gtk.Spinner()
         new_box.pack_start(self.spinner,0,0,0)
+        
+        new_box = Gtk.HBox()
+        self.progressbar = Gtk.ProgressBar()
+        new_box.pack_start(self.progressbar, 1, 1, 10)
+        self.progressbar.set_fraction(0)
+        m_down_box.pack_start(new_box,0,0,5)
+        
 
         #----------------------------------İndirilecekler Listesi
         #treeview ve list store oluşturulması
@@ -274,6 +281,7 @@ class MyWindow(Gtk.Window):
     def loop_stoped(self):
         #tüm install list_store yi boşaltır
         self.iSongStore.clear()
+        self.progressbar.set_fraction(0)
         self.spinner.stop()
 
     def install_list(self,widget):

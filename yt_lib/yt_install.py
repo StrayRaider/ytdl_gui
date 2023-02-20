@@ -53,6 +53,7 @@ def loop(link_list,parent,installation_type):
                             installed += 1
                             print("download",line_c)
                             download(link,installation_type)
+                            parent.progressbar.set_fraction(parent.progressbar.get_fraction()+1/len(link_list))
             else:
                 print(link)
         line_c +=1

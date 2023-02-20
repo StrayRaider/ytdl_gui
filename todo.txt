@@ -1,6 +1,6 @@
 1) change layout
 -1.1) add border
--1.2)change layout as you want
+-1.2) change layout as you want
 2) add progress bar
 -2.1)make it change with songs that installed
 3) 
