@@ -38,7 +38,6 @@ class MyWindow(Gtk.Window):
         right_box.set_size_request(x, y)
         left_box.set_size_request(x, y)
 
-
         #Search Part
         new_box = Gtk.HBox()
         m_cnt_box.pack_start(new_box,0,0,10)
@@ -46,21 +45,7 @@ class MyWindow(Gtk.Window):
         #Search entry
         self.search_entry = Gtk.Entry()
         self.search_entry.set_placeholder_text("Type")
-        new_box.pack_start(self.search_entry,0,0,10)
-        
-        #mp3 or mp4 chooser
-        new_box = Gtk.HBox()
-        m_cnt_box.pack_start(new_box,0,0,10)
-
-        new_box.pack_start(Gtk.Label("mp3 or mp4"),0,0,5)
-        self.protocol_combo = Gtk.ComboBoxText()
-        
-        #all connection elements
-        for pro in ["mp3","mp4"]:
-            self.protocol_combo.append_text(pro)
-        new_box.pack_start(self.protocol_combo,1,1,5)
-        
-        m_cnt_box.pack_start(new_box,0,0,5)
+        new_box.pack_start(self.search_entry,1,1,10)
 
         #Search button
         but_box = Gtk.HBox()
@@ -104,28 +89,27 @@ class MyWindow(Gtk.Window):
         self.add_button.connect("clicked", self.add_song)
         nVBox.pack_start(self.add_button,1,1,10)
 
-        #directory entry
-        new_box = Gtk.HBox()
-        install_box.pack_start(new_box,0,0,10)
-        self.dir_entry = Gtk.Entry()
-        self.dir_entry.set_placeholder_text("directory")
-        new_box.pack_start(self.dir_entry,0,0,10)
-
-        #set dir but
-        #new_box = Gtk.HBox()
-        install_box.pack_start(new_box,1,1,0)
-        self.set_dir_button = Gtk.Button(label="Set Directory")
-        #self.button.connect("clicked", self.install_one_song) 
-        self.set_dir_button.connect("clicked", self.change_dir)
-        new_box.pack_start(self.set_dir_button,0,0,0)
-
         #install but
         nVBox = Gtk.VBox()
-        install_box.pack_start(nVBox,1,1,10)
-        self.button = Gtk.Button(label=" Install ")
+        m_down_box.pack_start(nVBox,0,0,10)
+        self.button = Gtk.Button(label=" Install All")
         #self.button.connect("clicked", self.install_one_song) 
         self.button.connect("clicked", self.install_list)
-        nVBox.pack_start(self.button,1,1,10)
+        nVBox.pack_start(self.button,0,0,10)
+        
+        #mp3 or mp4 chooser
+        new_box = Gtk.HBox()
+        m_down_box.pack_start(new_box,0,0,10)
+
+        new_box.pack_start(Gtk.Label("mp3 or mp4"),0,0,5)
+        self.protocol_combo = Gtk.ComboBoxText()
+        
+        #all connection elements
+        for pro in ["mp3","mp4"]:
+            self.protocol_combo.append_text(pro)
+        new_box.pack_start(self.protocol_combo,0,0,5)
+        
+        m_cnt_box.pack_start(new_box,0,0,5)
 
         #spinner
         self.spinner = Gtk.Spinner()
