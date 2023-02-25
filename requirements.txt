@@ -1,2 +1,2 @@
-pytube>=10.0.0
-youtube-search-python>=1.0.0
+pytube
+youtube-search-python
