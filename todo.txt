@@ -4,3 +4,16 @@
 2) add progress bar
 -2.1)make it change with songs that installed
 3) 
+
+
+
+old todoes
+- arama ve indirme kısmı
+  - birden fazla arama yapılması
+  - yapılan çoklu aramanın yeni bir pencerede listelenmesi
+    - liststore kullanılacak
+    - arananların listesinden seçilenler indirilecekler listesine atanacak
+    - indir komutuyla hepsi indirilip geçmişte indirilenler kısmına eklenecek
+    - liststore objesine satırı sil butonu eklenicek
+    - liststore objesinin hücrelerine boyut atama
+  - çoklu arama seçiminin sonucunda seçilen şarkıların indirilebilmesi

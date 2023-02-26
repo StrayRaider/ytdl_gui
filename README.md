@@ -1,21 +1,9 @@
-# YdlGuı
-### install req
+# YtdlGuı
+## Easy to use youtube installation application
+
+##What is YtdlGui
+Ytdl is a open source youtube search and download application.
+main technologies used at this projects are PyGtk and pytube.
+
+### install requirements
 - pip install -r requirements.txt
-
-### gerekli kütüphanelerin kurulması
-- pip3 install youtube-search-python
-- pip3 install pytube
-
-## To Do list
-
-
-
-- arama ve indirme kısmı
-  - birden fazla arama yapılması
-  - yapılan çoklu aramanın yeni bir pencerede listelenmesi
-    - liststore kullanılacak
-    - arananların listesinden seçilenler indirilecekler listesine atanacak
-    - indir komutuyla hepsi indirilip geçmişte indirilenler kısmına eklenecek
-    - liststore objesine satırı sil butonu eklenicek
-    - liststore objesinin hücrelerine boyut atama
-  - çoklu arama seçiminin sonucunda seçilen şarkıların indirilebilmesi
