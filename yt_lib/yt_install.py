@@ -1,4 +1,5 @@
 from pytube import YouTube
+from pytube import Playlist
 from youtubesearchpython import VideosSearch
 import os
 
@@ -52,7 +53,7 @@ def loop(link_list,parent,installation_type):
                             #oynatma listesi
                             installed += 1
                             print("download",line_c)
-                            download(link,installation_type)
+                            download_link(link,installation_type)
                             parent.progressbar.set_fraction(parent.progressbar.get_fraction()+1/len(link_list))
             else:
                 print(link)
@@ -81,7 +82,33 @@ def write_link(link,name):
     list_file.writelines(w_list)
     list_file.close()
 
-def download(link,installation_type):
+def download_playlist(playlist_link,download_type):
+    playL = Playlist(playlist_link)
+    for video in playL: 
+        if download_type == "mp3":
+            download_mp4(video)
+        else:
+            download_mp3(video)
+
+def download_mp4(yt,res="720p"):
+    mp4 = yt.streams.filter(res,mime_type="video/mp4").first()
+    out = mp4.download(directory)
+    print("mp4_stream bitti")
+
+
+def download_mp3(yt):
+    mp3 = yt.streams.filter(only_audio=True).first()
+    out = mp3.download(directory)
+    print("mp3_stream bitti")
+    base, ext = os.path.splitext(out)
+    name = base.split("/")[-1]
+    print(name)
+    to_mp3 = base + ".mp3"
+    os.rename(out,to_mp3)
+    if history:
+        write_link(link,name)
+
+def download_link(link,download_type):
     try:
         yt = YouTube(link)
     except:
@@ -89,22 +116,10 @@ def download(link,installation_type):
         return None
         #exit()
     print("mp3_stream başladı")
-    if installation_type == "mp3":
-        mp3 = yt.streams.filter(only_audio=True).first()
-        print("mp3_stream bitti")
-        out = mp3.download(directory)
-
-        base, ext = os.path.splitext(out)
-        name = base.split("/")[-1]
-        print(name)
-        to_mp3 = base + ".mp3"
-        os.rename(out,to_mp3)
-        if history:
-            write_link(link,name)
+    if download_type == "mp3":
+        download_mp3(yt)
     else:
-        mp4 = yt.streams.filter(res="720p",mime_type="video/mp4").first()
-        out = mp4.download(directory)
-        print("mp4_stream bitti")
+        download_mp4(yt)
 
 def list_obj():
     dosyalar = os.listdir(directory)
